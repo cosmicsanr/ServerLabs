@@ -11,6 +11,7 @@
 
 from decimal import Decimal as dec
 
+
 def main():
     while True:
         cambio_eur_usd = dec('1.1')
@@ -39,6 +40,7 @@ def main():
         #:
     #:
 #:
+
 
 if __name__ == '__main__':
     main()

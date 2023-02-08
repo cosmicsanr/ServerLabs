@@ -62,6 +62,10 @@ class Produto:
         self.preco = preco
     #:
 
+    def get_desc_tipo(self) -> str:
+        return PRODUCT_TYPES[self.tipo]
+    #:
+
     def __str__(self):
         cls_name = self.__class__.__name__
         return f'{cls_name}[id_= {self.id}  nome = "{self.nome}" tipo = "{self.tipo}"]'
@@ -69,8 +73,8 @@ class Produto:
 
     def __repr__(self):
         cls_name = self.__class__.__name__
-        return f'{cls_name}(id_={self.id}, nome={self.nome}, tipo={self.tipo}, '\
-            f'quantidade={self.quantidade}, preco={self.preco})'
+        return f'{cls_name}(id_={self.id}, nome="{self.nome}", tipo="{self.tipo}", '\
+            f'quantidade={self.quantidade}, preco={repr(self.preco)})'
 
     # Com Iva
     def com_iva(self, taxa_iva: dec) -> dec:
