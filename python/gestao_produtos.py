@@ -65,7 +65,7 @@ class Produto:
     @classmethod
     def from_csv(cls, linha: str, delim=CSV_DEFAULT_DELIM) -> 'Produto':
         attrs = linha.split(delim)
-        return Produto(
+        return cls(
             id_=int(attrs[0]),
             nome=attrs[1],
             tipo=attrs[2],
@@ -94,6 +94,11 @@ class Produto:
         return self.preco * (1 + taxa_iva/100)
     #:
 #:
+
+
+# class ProdutoEspecial(Produto):
+#    def valor_stock(self) -> dec:
+#       return self.quantidade * self.preco
 
 
 class InvalidProdAttribute(ValueError):
@@ -176,14 +181,18 @@ def linhas_relevantes(fich: TextIO):
 
 def main() -> None:
     #    produtos = CatalogoProdutos()
- #   produtos.append(Produto(30987, 'pão de milho', 'AL', 2, dec('1')))
-  #  produtos.append(Produto(30098, 'leite mimosa', 'AL', 10, dec('2')))
-   # produtos.append(Produto(21109, 'fairy', 'DL', 20, dec('3')))
-    # produtos.append(Produto(21109, 'fairy', 'DL', 20, dec('3')))
+    #    produtos.append(Produto(30987, 'pão de milho', 'AL', 2, dec('1')))
+    #    produtos.append(Produto(30098, 'leite mimosa', 'AL', 10, dec('2')))
+    #    produtos.append(Produto(21109, 'fairy', 'DL', 20, dec('3')))
+    #    produtos.append(Produto(21109, 'fairy', 'DL', 20, dec('3')))
 
     produtos = le_produtos('produtos.csv')
     produtos._dump()
-    le_produtos('produtos.csv')
+
+    print('---------')
+
+#    produto = ProdutoEspecial.from_csv('21112,sonasol,DL,25,2.5')
+#    print(type(produto))
 #:
 
 
