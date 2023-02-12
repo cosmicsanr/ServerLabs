@@ -178,21 +178,97 @@ def linhas_relevantes(fich: TextIO):
         yield linha
 #:
 
+# Menu, opcoes e interacao com utilizador
+
+
+def exibe_msg(*args, indent=DEFAULT_INDENTATION, **kargs):
+    print(' ' * (indent - 1), *args, **kargs)
+#:
+
+
+def entrada(msg: str, indent=DEFAULT_INDENTATION) -> str:
+    return input(f"{' ' * DEFAULT_INDENTATION}{msg}")
+#:
+
+
+def cls():
+    if sys.platform == 'win32':
+        subprocess.run(['cls'], shell=True, check=True)
+    elif sys.platform in ('darwin', 'linux', 'bsd', 'unix'):
+        subprocess.run(['clear'], check=True)
+    #:
+#:
+
+
+def pause(msg: str = "Pressione ENTER para continuar...", indent=DEFAULT_INDENTATION):
+    input(f"{' ' * indent}{msg}")
+#:
+
+
+produtos = CatalogoProdutos()
+
+
+def exec_menu():
+    """
+    - Lista o catálogo
+    - Pesquisar por alguns campos 
+    - Eliminar um registo do catálogo
+    - Guardar o catálogo em ficheiro
+    """
+
+    while True:
+        cls()
+        exibe_msg("*******************************************")
+        exibe_msg("* L - Listar catálogo                     *")
+        exibe_msg("* P - Pesquisar por id                    *")
+        exibe_msg("* A - Acrescentar produto                 *")
+        exibe_msg("* E - Eliminar produto                    *")
+        exibe_msg("* G - Guardar catálogo em ficheiro        *")
+        exibe_msg("*                                         *")
+        exibe_msg("* T - Terminar programa                   *")
+        exibe_msg("*******************************************")
+
+        print()
+        opcao = entrada("OPCAO> ").strip().upper()
+
+        if opcao in ('L', 'LISTAR'):
+            exec_listar()
+        elif opcao in ('T', 'Terminar'):
+            exec_terminar()
+        else:
+            exibe_msg(f"Opcao {opcao} invalida!")
+            pause()
+#:
+
+
+def exec_listar():
+    cabecalho = f'{"ID":^8}|{"Nome":^26}|{"Tipo":^8}|{"Quantidade":^16}|{"Preço":^16}'
+    separador = f'{"-" * 8}+{"-" * 26}+{"-" * 8}+{"-" * 16}+{"-" * 16}'
+    # cabecalho = f'{"ID":^20}|{"Nome":^20}|{"Tipo":^20}|{"Quantidade":^20}|{"Preco":^20}'
+    # separador = '|'.join(['-' * 20] * 5)
+    print()
+    exibe_msg(cabecalho)
+    exibe_msg(separador)
+    for prod in produtos:
+        linha = f'{prod.id:^8}|{prod.nome:^26}|{prod.tipo:^8}|{prod.quantidade:^16}|{prod.preco:^16}'
+        # linha = f'{prod.id:^20}|{prod.nome:^20}|{prod.tipo:^20}|{prod.quantidade:^20}|{prod.preco:^20}'
+        exibe_msg(linha)
+    #:
+    exibe_msg(separador)
+    print()
+    pause()
+#:
+
+
+def exec_terminar():
+    sys.exit(0)
+#:
+
 
 def main() -> None:
-    #    produtos = CatalogoProdutos()
-    #    produtos.append(Produto(30987, 'pão de milho', 'AL', 2, dec('1')))
-    #    produtos.append(Produto(30098, 'leite mimosa', 'AL', 10, dec('2')))
-    #    produtos.append(Produto(21109, 'fairy', 'DL', 20, dec('3')))
-    #    produtos.append(Produto(21109, 'fairy', 'DL', 20, dec('3')))
-
+    global produtos
     produtos = le_produtos('produtos.csv')
-    produtos._dump()
-
-    print('---------')
-
-#    produto = ProdutoEspecial.from_csv('21112,sonasol,DL,25,2.5')
-#    print(type(produto))
+    exec_menu()
 #:
 
 
