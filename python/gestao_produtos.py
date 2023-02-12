@@ -62,6 +62,18 @@ class Produto:
         self.preco = preco
     #:
 
+    @classmethod
+    def from_csv(cls, linha: str, delim=CSV_DEFAULT_DELIM) -> 'Produto':
+        attrs = linha.split(delim)
+        return Produto(
+            id_=int(attrs[0]),
+            nome=attrs[1],
+            tipo=attrs[2],
+            quantidade=int(attrs[3]),
+            preco=dec(attrs[4])
+        )
+    #:
+
     @property
     def get_desc_tipo(self) -> str:
         return PRODUCT_TYPES[self.tipo]
@@ -147,15 +159,7 @@ def le_produtos(caminho_fich: str, delim=CSV_DEFAULT_DELIM) -> CatalogoProdutos:
     prods = CatalogoProdutos()
     with open(caminho_fich, 'rt') as fich:
         for linha in linhas_relevantes(fich):
-            attrs = linha.split(delim)
-            prods.append(Produto(
-                id_=int(attrs[0]),
-                nome=attrs[1],
-                tipo=attrs[2],
-                quantidade=int(attrs[3]),
-                preco=dec(attrs[4])
-            ))
-
+            prods.append(Produto.from_csv(linha, delim))
     return prods
 #:
 
