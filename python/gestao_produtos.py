@@ -140,15 +140,46 @@ class DuplicateValue(Exception):
     pass
 #:
 
+# Read files
+
+
+def le_produtos(caminho_fich: str, delim=CSV_DEFAULT_DELIM) -> CatalogoProdutos:
+    prods = CatalogoProdutos()
+    with open(caminho_fich, 'rt') as fich:
+        for linha in linhas_relevantes(fich):
+            attrs = linha.split(delim)
+            prods.append(Produto(
+                id_=int(attrs[0]),
+                nome=attrs[1],
+                tipo=attrs[2],
+                quantidade=int(attrs[3]),
+                preco=dec(attrs[4])
+            ))
+
+    return prods
+#:
+
+
+def linhas_relevantes(fich: TextIO):
+    linhas = []
+    for linha in fich:
+        linha = linha.strip()
+        if len(linha) == 0 or linha[0] == '#':
+            continue
+        yield linha
+#:
+
 
 def main() -> None:
-    produtos = CatalogoProdutos()
-    produtos.append(Produto(30987, 'pão de milho', 'AL', 2, dec('1')))
-    produtos.append(Produto(30098, 'leite mimosa', 'AL', 10, dec('2')))
-    produtos.append(Produto(21109, 'fairy', 'DL', 20, dec('3')))
+    #    produtos = CatalogoProdutos()
+ #   produtos.append(Produto(30987, 'pão de milho', 'AL', 2, dec('1')))
+  #  produtos.append(Produto(30098, 'leite mimosa', 'AL', 10, dec('2')))
+   # produtos.append(Produto(21109, 'fairy', 'DL', 20, dec('3')))
     # produtos.append(Produto(21109, 'fairy', 'DL', 20, dec('3')))
 
+    produtos = le_produtos('produtos.csv')
     produtos._dump()
+    le_produtos('produtos.csv')
 #:
 
 
