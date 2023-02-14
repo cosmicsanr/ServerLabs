@@ -20,8 +20,20 @@ class Vehicle:
             print(f"'{licensePlate}' - License Plate inválid")
         # else:
             # print(f"'{licensePlate}' - License Plate válid")
-        # if not brand:
-        #   raise InvalidVehicleAttribute(f"")
+
+        regexBrand = re.compile(
+            r"^[A-Z].{3,}$")
+        if not re.fullmatch(regexBrand, brand):
+            print(f"{brand}' - Brand inválid")
+        else:
+            print(f"'{brand}' - brand válid")
+
+        regexModel = re.compile(
+            r"(^[0-9].{3,}$)|(^[A-Z].{3,}$)")
+        if not re.fullmatch(regexModel, model):
+            print(f"'{model}' - Model inválid")
+        else:
+            print(f"'{model}' - Model válid")
 
         self.licensePlate = licensePlate
         self.brand = brand
