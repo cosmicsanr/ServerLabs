@@ -1,6 +1,9 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+import schemas as sch
+from schemas import Errorcode
+
 app = FastAPI()
 
 origins = [
@@ -19,7 +22,7 @@ app.add_middleware(
 
 
 @app.post('/register')
-async def register(player: str):
+async def register(player: sch.PlayerRegister) -> sch.PlayerRegisterResult:
     return "XPTO"
 
 ################################
