@@ -1,6 +1,11 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+
+import schemas as sch
+from schemas import ErrorCode
+
+
 app = FastAPI()
 
 origins = [
@@ -19,8 +24,22 @@ app.add_middleware(
 
 
 @app.post('/register')
-async def register(player: str):
-    return "XPTO"
+async def register(player: sch.PlayerRegister) -> sch.PlayerRegisterResult:
+    tourn_id = player.tournament_id
+    if tourn_id is None:
+        error = ErrorCode.ERR_UNSPECIFIED_TOURNAMENT
+        raise HTTPException(status_code=400, detail=error.details())
+
+    if tourn_id not in (1, 2, 3):
+        error = ErrorCode.ERR_UNKNOWN_TOURNAMENT_ID
+        raise HTTPException(status_code=404, detail=error.details(id=tourn_id))
+
+    return sch.PlayerRegisterResult(
+        id=1105,
+        full_name=player.full_name,
+        email=player.email
+    )
+
 
 ################################
 
