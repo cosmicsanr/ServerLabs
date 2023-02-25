@@ -1,4 +1,4 @@
-import { 
+import {
     installValidators,
     validateAllFields,
     resetAllFields,
@@ -15,27 +15,56 @@ import {
 
 
 const URL = 'http://127.0.0.1:8000';
-const tournamentID = 1;
+const TOURNAMENT_ID = 1;
 
 addPredicates({
-    fullName           : /^\p{Letter}{2,}( \p{Letter}{2,})+$/u,
-    password           : { 
+    fullName: /^\p{Letter}{2,}( \p{Letter}{2,})+$/u,
+    password: {
         expr: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[#$%&]).{6,10}$/,
         showSuccess: true,
     },
-    confirmPassword     : {
+    confirmPassword: {
         expr: confirmPassword,
         showSuccess: true,
     },
-    'date_DD/MM/YYYY'  : isValidDate,
-    phoneNumber        : /^(\+\d{3})?\d{9}$/,
+    'date_DD/MM/YYYY': isValidDate,
+    phoneNumber: /^(\+\d{3})?\d{9}$/,
 });
 
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
     installValidators();
     whenClick('reset', e => resetAllFields());
     whenClick('submit', validateAndSubmitForm);
 });
+
+async function validateAndSubmitForm() {
+    if (!validateAllFields()) {
+        return;
+    }
+    try {
+        const [responseOK, responseData] = await registerPlayer();
+        const showStatusFn = responseOK ? showSuccess : showError;
+        showStatusFn(responseData);
+    }
+    catch (error) {
+        console.error(`ERROR: An error has ocurred when connecting to server at ${URL}`)
+        console.error(error);
+    }
+}
+
+async function registerPlayer() {
+    const player = {
+        full_name: bySel('[name=fullName]').value,
+        email: bySel('[name=email]').value,
+        password: bySel('[name=password]').value,
+        phone_number: bySel('[name=phoneNumber]').value,
+        birth_date: bySel('[name=birthDate]').value,
+        level: bySel('[name=level]').value,
+        tournament_id: TOURNAMENT_ID,
+    };
+    const response = await byPOSTasJSON(`${URL}/register`, player);
+    return [response.ok, await response.json()];
+}
 
 /**
  * @param {Object} responseData 
@@ -52,19 +81,21 @@ Email: ${responseData.email}`;
     showSubmissionInfo(msg, true);
 }
 
+
 /**
  * @param {Object} responseData 
  */
 function showError(responseData) {
-    const msg = `Não foi possível concluir a inscrição. ${responseData.detail}`;
+    const errorInfo = responseData.detail;
+    const msg = `Não foi possível concluir a inscrição. ${errorInfo.error_msg}`;
     showSubmissionInfo(msg, false);
 }
 
 function showSubmissionInfo(msg, success) {
     const submissionStatusElem = document.querySelector('.submission-status');
-    const [cssClassToAdd, cssClassToRem] = (success ? 
-          ['submission-status-ok', 'submission-status-error'] 
-        : ['submission-status-error', 'submission-status-ok'] 
+    const [cssClassToAdd, cssClassToRem] = (success ?
+        ['submission-status-ok', 'submission-status-error']
+        : ['submission-status-error', 'submission-status-ok']
     );
     submissionStatusElem.innerHTML = `${msg}`;
     submissionStatusElem.classList.add(cssClassToAdd);
