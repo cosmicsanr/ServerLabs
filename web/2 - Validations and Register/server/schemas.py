@@ -7,6 +7,25 @@ class PlayerBase(BaseModel):
     full_name: str
     email: str
 
+    class Config:
+        # https://docs.pydantic.dev/usage/model_config/
+        # https://docs.pydantic.dev/usage/models/#orm-mode-aka-arbitrary-class-instances
+        orm_mode = True
+
+# NOTE: Notice that SQLAlchemy models define attributes using '=', and
+# pass the type as a parameter to Column like in:
+#
+#   name = Column(String)
+#
+# Whereas, Pydantic models declare the types using Python native types
+# and annotates them with ':', the notation used in Python to declare
+# types:
+#
+#   name: str
+#
+# Have it in mind, so you don't get confused when using '=' and ':' with
+# them.
+
 
 class PlayerRegister(PlayerBase):
     password: str
