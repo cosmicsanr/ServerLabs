@@ -48,6 +48,10 @@ class Vehicle:
         self.date = date
 
 
+def __str__(self) -> str:
+    cls_name = self.__class__.__name__
+
+
 def main() -> None:
     vehicle1 = Vehicle("10-XY-20", "Opel", "Corsa XL", "2019-10-15")
 
