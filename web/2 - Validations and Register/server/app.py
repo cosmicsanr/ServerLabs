@@ -100,7 +100,7 @@ def main():
 A web accessible FastAPI server that allow players to register/enroll for tournaments
 
 Usage:
-    app.py [-c | -c -d] [-p PORT] [-h HOST_IP]
+    app.py [-c | -c -d] [-p PORT] [-h HOST_IP] 
 
 Options:
     -p PORT, --port=PORT        Listen on this port [default: 8000]
