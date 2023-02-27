@@ -51,13 +51,14 @@ def main():
 A web accessible FastAPI server that allow players to register/enroll for tournaments
 
 Usage:
-    app.py [-c | -c -d] [-p PORT] [-h HOST_IP]
+    app.py [-c | -c -d] [-p PORT] [-h HOST_IP] [r --reload]
 
 Options:
     -p PORT, --port=PORT        Listen on this port [default: 8000]
     -c, --create-ddl            Create the models in the database
     -d --populate-db            Populate the DB with dummy for testing purposes
     -h HOST_IP, --host=HOST_IP  Listen on this IP address [default: 127.0.0.1]
+    -r --reload                 Reloading server after changes
     """
 
     args = docopt(help_doc)
@@ -71,8 +72,8 @@ Options:
     uvicorn.run('app:app',
                 port=int(args['--port']),
                 host=args['--host'],
-                reload=True,
-
+                # reload=True,
+                reload=args['--reload'],
                 )
 
 
