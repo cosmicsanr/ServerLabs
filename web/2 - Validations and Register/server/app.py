@@ -58,14 +58,14 @@ def get_db_session():
         yield db_session
     finally:
         db_session.close()
+#:
 
 
 @app.post('/register', response_model=sch.PlayerRegisterResult)
 async def register(
-    player: sch.PlayerRegister,
-    db_session: Session = Depends(get_db_session)
+        player: sch.PlayerRegister,
+        db_session: Session = Depends(get_db_session),
 ):
-
     tourn_id = player.tournament_id
     if tourn_id is None:
         error = ErrorCode.ERR_UNSPECIFIED_TOURNAMENT

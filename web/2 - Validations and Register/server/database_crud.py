@@ -40,7 +40,7 @@ def create_player(
     db_player = models.Player(
         full_name=player.full_name,
         email=player.email,
-        hasshed_password=fake_hashed_password,
+        hashed_password=fake_hashed_password,
         phone_number=player.phone_number,
         level=player.level,
     )
