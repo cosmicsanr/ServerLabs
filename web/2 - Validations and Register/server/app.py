@@ -66,7 +66,7 @@ async def register(
         player: sch.PlayerRegister,
         db_session: Session = Depends(get_db_session),
 ):
-    tourn_id = player.tournament_id
+    tourn_id = player.tournament_id  # Torneio do player  registo.js
     if tourn_id is None:
         error = ErrorCode.ERR_UNSPECIFIED_TOURNAMENT
         raise HTTPException(status_code=400, detail=error.details())
@@ -75,7 +75,7 @@ async def register(
     if not db_player:
         db_player = crud.create_player(db_session, player)
 
-    if db_player.tournament_id == tourn_id:
+    if crud.get_player_tournaments(db_session, db_player, tourn_id):
         error = ErrorCode.ERR_PLAYER_ALREADY_ENROLLED
         raise HTTPException(
             status_code=400, detail=error.details(tourn_id=tourn_id))
@@ -100,13 +100,14 @@ A Web accessible FastAPI server that allow players to register/enroll
 for tournaments.
 
 Usage:
-  app.py [-c | -c -d] [-p PORT] [-h HOST_IP]
+  app.py [-c | -c -d] [-p PORT] [-h HOST_IP] [-r]
 
 Options:
   -p PORT, --port=PORT          Listen on this port [default: 8000]
   -c, --create-ddl              Crea    te datamodel in the database
   -d, --populate-db             Populate the DB with dummy for testing purposes
   -h HOST_IP, --host=HOST_IP    Listen on this IP address [default: 127.0.0.1]
+  -r --reload                   Reloading server after changes
 """
     args = docopt(help_doc)
     create_ddl = args['--create-ddl']
@@ -120,7 +121,7 @@ Options:
         'app:app',
         port=int(args['--port']),
         host=args['--host'],
-        reload=True,
+        reload=args['--reload'],
     )
 
 

@@ -32,6 +32,13 @@ def get_player_by_id(db_session: Session, player_id: int) -> models.Player | Non
     ).first()
 
 
+def get_player_tournaments(db_session: Session, player_db: models.Player, tournament_id: int) -> models.Player | None:
+    tournament = get_tournament_by_id(db_session, tournament_id)
+    for player in tournament.players_enrolled:
+        if player.id == player_db.id:
+            return player
+
+
 def create_player(
         db_session: Session,
         player: schemas.PlayerRegister,
@@ -55,5 +62,6 @@ def update_player_tournament(
         db_player: models.Player,
         tournament_id: int,
 ):
-    db_player.tournament_id = tournament_id  # type: ignore
+    db_player.tournament.append(get_tournament_by_id(
+        db_session, tournament_id))  # type: ignore
     db_session.commit()

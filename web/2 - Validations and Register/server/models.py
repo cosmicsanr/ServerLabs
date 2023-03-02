@@ -12,6 +12,7 @@ Links:
 """
 
 from datetime import date
+from sqlalchemy import Table
 
 from sqlalchemy import (
     Boolean,
@@ -38,7 +39,17 @@ from database import Base, SessionLocal
 # Tournament 0..1 ______ 0..* Player.
 
 
-class Tournament(Base):    # type: ignore (Pylance doesn't recognize Base)
+association_enrollment = Table(
+    "Enrollment",
+    Base.metadata,
+    Column("id", Integer, primary_key=True, autoincrement="auto"),
+    Column("player_id", Integer, ForeignKey("Player.id")),
+    Column("tournament_id", Integer, ForeignKey("Tournament.id")),
+    Column("date", Date, default=date.today())
+)
+
+
+class Tournament(Base):
     __tablename__ = 'Tournament'
     __table_args__ = (
         CheckConstraint('end_date >= start_date', name='check_dates'),
@@ -49,7 +60,8 @@ class Tournament(Base):    # type: ignore (Pylance doesn't recognize Base)
     start_date = Column(Date, nullable=False)
     end_date = Column(Date, nullable=False)
 
-    players_enrolled = relationship("Player", back_populates="tournament")
+    players_enrolled = relationship(
+        "Player", back_populates="tournament", secondary=association_enrollment)
 
 # Tournament.players = relationship("Player", order_by=Player.id, back_populates="tournament")
 
@@ -65,8 +77,8 @@ class Player(Base):  # type: ignore  (Pylance )
     # birth_date      = Column(Date, nullable=False)
     level = Column(String(30), nullable=False)
     is_active = Column(Boolean, default=True)
-    tournament_id = Column(Integer, ForeignKey("Tournament.id"))
-    tournament = relationship("Tournament", back_populates="players_enrolled")
+    tournament = relationship(
+        "Tournament", back_populates="players_enrolled", secondary=association_enrollment)
 
     # https://docs.sqlalchemy.org/en/13/orm/extensions/declarative/table_config.html
 
@@ -86,37 +98,54 @@ def populate_db():
             phone_number='+351922781977',
             level='beginner',
         )
+
+        player2 = Player(
+            full_name='Augusto Avelar',
+            email='aug@mail.com',
+            hashed_password='123-hashedpw',
+            phone_number='+351921061344',
+            level='pre-pro',)
+
+        player3 = Player(
+            full_name='Arnaldo Almeida',
+            email='arn@mail.com',
+            hashed_password='xyz-hashedpw',
+            phone_number='+351964139829',
+            level='advanced',
+        )
+
         db_session.add_all([
-            Tournament(
-                id=1,
-                name='Torneio da Páscoa',
-                start_date=date(2023, 4, 17),
-                end_date=date(2023, 4, 25),
-            ),
-            Tournament(
-                id=2,
-                name='Torneio da Amizade',
-                start_date=date(2023, 5, 17),
-                end_date=date(2023, 5, 25),
-            ),
+            # Tournament(
+            #     id=1,
+            #     name='Torneio da Páscoa',
+            #     start_date=date(2023, 4, 17),
+            #     end_date=date(2023, 4, 25),
+            # ),
+            # Tournament(
+            #     id=2,
+            #     name='Torneio da Amizade',
+            #     start_date=date(2023, 5, 17),
+            #     end_date=date(2023, 5, 25),
+            # ),
             player1,
-            Player(
-                full_name='Augusto Avelar',
-                email='aug@mail.com',
-                hashed_password='123-hashedpw',
-                phone_number='+351921061344',
-                level='pre-pro',
-                tournament_id=1,
-            ),
-            Player(
-                full_name='Arnaldo Almeida',
-                email='arn@mail.com',
-                hashed_password='xyz-hashedpw',
-                phone_number='+351964139829',
-                level='advanced',
-                tournament_id=2,
-            ),
+            player2,
+            player3,
         ])
+
+        player1.tournament.append(Tournament(
+            id=1,
+            name='Torneio da Páscoa',
+            start_date=date(2023, 4, 17),
+            end_date=date(2023, 4, 25),
+        ))
+
+        player2.tournament.append(Tournament(
+            id=2,
+            name='Torneio da Amizade',
+            start_date=date(2023, 5, 17),
+            end_date=date(2023, 5, 25),
+        ))
+
         # At this point, we say that the instance is pending; no SQL has
         # yet been issued and the object is not yet represented by a row
         # in the database. The Session will issue the SQL to persist Ed
