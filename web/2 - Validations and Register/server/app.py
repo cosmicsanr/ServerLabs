@@ -23,8 +23,11 @@ Links:
     https://docs.sqlalchemy.org/en/14/orm/
 """
 
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.templating import Jinja2Templates
+from sqlalchemy import column
 
 from sqlalchemy.orm import Session
 
@@ -36,6 +39,7 @@ from schemas import ErrorCode
 
 
 app = FastAPI()
+templates = Jinja2Templates(directory='templates')
 
 origins = [
     "http://127.0.0.1:5500",
@@ -61,12 +65,19 @@ def get_db_session():
         db_session.close()
 
 
+@app.get('/tournaments')
+async def index(db_session: Session = Depends(get_db_session)):
+    tournaments = db_session.query(column('id'), column(
+        'name')).select_from(models.Tournament)
+    return JSONResponse(content=[{"id": tournament.id, "name": tournament.name} for tournament in tournaments])
+
+
 @app.post('/register', response_model=sch.PlayerRegisterResult)
 async def register(
         player: sch.PlayerRegister,
         db_session: Session = Depends(get_db_session),
 ):
-    tourn_id = player.tournament_id  # Torneio do player  registo.js
+    tourn_id = player.tournament_id
     if tourn_id is None:
         error = ErrorCode.ERR_UNSPECIFIED_TOURNAMENT
         raise HTTPException(status_code=400, detail=error.details())

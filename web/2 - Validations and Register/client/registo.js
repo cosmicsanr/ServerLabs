@@ -15,7 +15,7 @@ import {
 
 
 const URL = 'http://127.0.0.1:8000';
-const TOURNAMENT_ID = 1;
+//const TOURNAMENT_ID = 1;
 
 addPredicates({
     fullName: /^\p{Letter}{2,}( \p{Letter}{2,})+$/u,
@@ -35,7 +35,33 @@ window.addEventListener('load', function () {
     installValidators();
     whenClick('reset', e => resetAllFields());
     whenClick('submit', validateAndSubmitForm);
+    //tourn();
 });
+
+
+const selectElement = document.getElementById("tournament");
+
+const tournReq = new XMLHttpRequest();
+tournReq.open("GET", "http://127.0.0.1:8000/tournaments");
+tournReq.onload = function () {
+    if (tournReq.status === 200) {
+        const data = JSON.parse(tournReq.responseText);
+
+        const tournaments = data;
+
+        tournaments.forEach(function (tournament) {
+            const optionElement = document.createElement("option");
+            optionElement.value = tournament.id;
+            optionElement.text = tournament.name;
+            selectElement.appendChild(optionElement);
+        });
+    } else {
+        console.error("Error fetching data from API");
+    }
+};
+tournReq.send();
+
+
 
 async function validateAndSubmitForm() {
     if (!validateAllFields()) {
@@ -60,7 +86,7 @@ async function registerPlayer() {
         phone_number: bySel('[name=phoneNumber]').value,
         birth_date: bySel('[name=birthDate]').value,
         level: bySel('[name=level]').value,
-        tournament_id: TOURNAMENT_ID,
+        tournament_id: bySel('[name=tournament]').value,
     };
     const response = await byPOSTasJSON(`${URL}/register`, player);
     return [response.ok, await response.json()];

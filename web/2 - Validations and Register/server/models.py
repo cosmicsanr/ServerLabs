@@ -55,7 +55,7 @@ class Tournament(Base):
         CheckConstraint('end_date >= start_date', name='check_dates'),
     )
 
-    id = Column(Integer, primary_key=True, autoincrement=False)
+    id = Column(Integer, primary_key=True, autoincrement="false")
     name = Column(String, nullable=False, unique=True)
     start_date = Column(Date, nullable=False)
     end_date = Column(Date, nullable=False)
@@ -77,6 +77,7 @@ class Player(Base):  # type: ignore  (Pylance )
     # birth_date      = Column(Date, nullable=False)
     level = Column(String(30), nullable=False)
     is_active = Column(Boolean, default=True)
+
     tournament = relationship(
         "Tournament", back_populates="players_enrolled", secondary=association_enrollment)
 
@@ -104,7 +105,8 @@ def populate_db():
             email='aug@mail.com',
             hashed_password='123-hashedpw',
             phone_number='+351921061344',
-            level='pre-pro',)
+            level='pre-pro',
+        )
 
         player3 = Player(
             full_name='Arnaldo Almeida',
@@ -115,33 +117,21 @@ def populate_db():
         )
 
         db_session.add_all([
-            # Tournament(
-            #     id=1,
-            #     name='Torneio da Páscoa',
-            #     start_date=date(2023, 4, 17),
-            #     end_date=date(2023, 4, 25),
-            # ),
-            # Tournament(
-            #     id=2,
-            #     name='Torneio da Amizade',
-            #     start_date=date(2023, 5, 17),
-            #     end_date=date(2023, 5, 25),
-            # ),
             player1,
             player2,
             player3,
         ])
 
         player1.tournament.append(Tournament(
-            id=1,
-            name='Torneio da Páscoa',
+            id='1',
+            name='futures',
             start_date=date(2023, 4, 17),
             end_date=date(2023, 4, 25),
         ))
 
         player2.tournament.append(Tournament(
-            id=2,
-            name='Torneio da Amizade',
+            id='2',
+            name='challenger',
             start_date=date(2023, 5, 17),
             end_date=date(2023, 5, 25),
         ))

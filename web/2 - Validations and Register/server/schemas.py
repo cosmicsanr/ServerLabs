@@ -22,6 +22,7 @@ security, the password won't be in other Pydantic models, for example,
 it won't be sent from the API when reading a user.
 """
 
+from datetime import date
 from enum import Enum
 
 from pydantic import BaseModel, Field
