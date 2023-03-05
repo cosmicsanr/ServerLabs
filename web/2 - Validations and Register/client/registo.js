@@ -60,7 +60,6 @@ tournReq.onload = function () {
 };
 tournReq.send();
 
-
 async function validateAndSubmitForm() {
     if (!validateAllFields()) {
         return;

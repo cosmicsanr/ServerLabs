@@ -48,7 +48,11 @@ const userMessages = {
         PRO_LEVEL: "Professional",
         SUBMIT_BTN: "Submit",
         RESET_BTN: "Reset",
-        PLAYER_TOURNAMENT_NAME: "Tournament",
+        START_DATE_LABEL: "Start date",
+        END_DATE_LABEL: "End date",
+        TOURNAMENT_NAME_LABEL: "Tournament name",
+        INSERT_TOURNAMENT_TITLE: "Insert Tournament",
+        TOURNAMENT: "Tournament",
     },
     pt_PT: {
         ERR_ENROLLING: "Não foi possível concluir a inscrição.",
@@ -80,7 +84,12 @@ const userMessages = {
         PRO_LEVEL: "Profissional",
         SUBMIT_BTN: "Submeter",
         RESET_BTN: "Limpar",
-        PLAYER_TOURNAMENT_NAME: "Torneio",
+        START_DATE_LABEL: "Data de início",
+        END_DATE_LABEL: "Data de fim",
+        TOURNAMENT_NAME_LABEL: "Nome do torneio",
+        INSERT_TOURNAMENT_TITLE: "Inserir Torneio",
+        TOURNAMENT: "Torneio",
+
     },
 };
 
@@ -136,9 +145,9 @@ const trDoc = (function () {
                     element.textContent = newText;
                 } catch (error) {
                     if (error instanceof TypeError) {
-                        throw new UnknownLanguage(`Unknown language "${currentLanguage}"`);
+                        throw new UnknownLanguage(`The language is invalid "${currentLanguage}"`);
                     } else {
-                        throw new UnknownMessageID(`Unknown message ID "${trMatch}"`);
+                        throw new UnknownMessageID(`Invalid message ID "${trMatch}"`);
                     }
                 }
             }

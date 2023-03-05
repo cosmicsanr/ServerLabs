@@ -8,6 +8,7 @@ Links:
     https://fastapi.tiangolo.com/tutorial/sql-databases/#crud-utils
 """
 
+from datetime import datetime
 from sqlalchemy.orm import Session
 
 import schemas
@@ -39,6 +40,12 @@ def get_player_tournaments(db_session: Session, player_db: models.Player, tourna
             return player
 
 
+def get_tournament_by_name(db_session: Session, tournament_name: str) -> models.Tournament | None:
+    return db_session.query(models.Tournament).filter(
+        models.Tournament.name == tournament_name
+    ).first()
+
+
 def create_player(
         db_session: Session,
         player: schemas.PlayerRegister,
@@ -65,3 +72,18 @@ def update_player_tournament(
     db_player.tournament.append(get_tournament_by_id(
         db_session, tournament_id))  # type: ignore
     db_session.commit()
+
+
+def create_tournament(
+        db_session: Session,
+        tournament: schemas.TournamentRegister,
+) -> models.Tournament:
+    db_tournament = models.Tournament(
+        name=tournament.name,
+        start_date=datetime.strptime(tournament.start_date, '%d/%m/%Y').date(),
+        end_date=datetime.strptime(tournament.end_date, '%d/%m/%Y').date(),
+    )
+    db_session.add(db_tournament)
+    db_session.commit()
+    db_session.refresh(db_tournament)
+    return db_tournament

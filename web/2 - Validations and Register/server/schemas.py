@@ -37,6 +37,14 @@ class PlayerBase(BaseModel):
         # https://docs.pydantic.dev/usage/models/#orm-mode-aka-arbitrary-class-instances
         orm_mode = True
 
+
+class TournamentBase(BaseModel):
+    name: str
+
+    class Config:
+        orm_mode = True
+
+
 # NOTE: Notice that SQLAlchemy models define attributes using '=', and
 # pass the type as a parameter to Column like in:
 #
@@ -66,10 +74,22 @@ class PlayerRegisterResult(PlayerBase):
     id: int
 
 
+class TournamentRegister(TournamentBase):
+    start_date: str
+    end_date: str
+
+
+class TournamentRegisterResult(TournamentBase):
+    id: int
+    start_date: date
+    end_date: date
+
+
 class ErrorCode(Enum):
     ERR_UNSPECIFIED_TOURNAMENT = 'Missing tournament id.'
     ERR_PLAYER_ALREADY_ENROLLED = 'Player already enrolled in tournament'
     ERR_UNKNOWN_TOURNAMENT_ID = 'Unknown tournament id'
+    ERR_TOURNAMENT_ALREADY_EXISTS = 'Tournament name already registered'
 
     def details(self, **kargs) -> dict:
         details_dict = {'error_code': self.name, 'error_msg': self.value}

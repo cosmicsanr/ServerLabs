@@ -55,7 +55,7 @@ class Tournament(Base):
         CheckConstraint('end_date >= start_date', name='check_dates'),
     )
 
-    id = Column(Integer, primary_key=True, autoincrement="false")
+    id = Column(Integer, primary_key=True, autoincrement="auto")
     name = Column(String, nullable=False, unique=True)
     start_date = Column(Date, nullable=False)
     end_date = Column(Date, nullable=False)
@@ -116,25 +116,39 @@ def populate_db():
             level='advanced',
         )
 
+        tournament1 = Tournament(
+            name='Futures',
+            start_date=date(2023, 8, 20),
+            end_date=date(2023, 8, 22),
+        )
+
+        tournament2 = Tournament(
+            name='Hot Potato',
+            start_date=date(2023, 4, 15),
+            end_date=date(2023, 4, 20),
+        )
+
         db_session.add_all([
             player1,
             player2,
             player3,
+            tournament1,
+            tournament2,
         ])
 
-        player1.tournament.append(Tournament(
-            id='1',
-            name='futures',
-            start_date=date(2023, 4, 17),
-            end_date=date(2023, 4, 25),
-        ))
+        # player1.tournament.append(Tournament(
+        #     id='1',
+        #     name='futures',
+        #     start_date=date(2023, 4, 17),
+        #     end_date=date(2023, 4, 25),
+        # ))
 
-        player2.tournament.append(Tournament(
-            id='2',
-            name='challenger',
-            start_date=date(2023, 5, 17),
-            end_date=date(2023, 5, 25),
-        ))
+        # player2.tournament.append(Tournament(
+        #     id='2',
+        #     name='challenger',
+        #     start_date=date(2023, 5, 17),
+        #     end_date=date(2023, 5, 25),
+        # ))
 
         # At this point, we say that the instance is pending; no SQL has
         # yet been issued and the object is not yet represented by a row

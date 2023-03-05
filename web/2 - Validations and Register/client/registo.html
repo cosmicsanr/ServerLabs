@@ -15,7 +15,6 @@
 <body>
 
     <main>
-
         <div class="left-part">
             <i class="fa fa-table-tennis fa-4x"></i>
             <h1 data-trValue="{{tr TOURNAMENT_NAME}}"></h1>
@@ -25,7 +24,6 @@
                 <a class="btn-item" href="#" data-trValue="{{tr MEMBERS}}"></a>
             </div>
         </div>
-
         <form autocomplete="off" novalidate>
             <div class="title">
                 <i class="fas fa-pencil-alt"></i>
@@ -34,13 +32,15 @@
             <div class="submission-status"></div>
             <div class="info">
                 <div class="field">
-                    <label data-trValue="{{tr FULL_NAME_LABEL}}"><span class="required">*</span></label>
+                    <label data-trValue="{{tr FULL_NAME_LABEL}}">
+                        <span class="required">*</span></label>
                     <input type="text" name="fullName" required autofocus data-validation="fullName"
                         value="Alberto Antunes" placeholder="Nome completo *">
                     <span class="status"></span>
                 </div>
                 <div class="field">
-                    <label data-trValue="{{tr EMAIL_ADDR_LABEL}}"><span class="required">*</span></label>
+                    <label data-trValue="{{tr EMAIL_ADDR_LABEL}}">
+                        <span class="required">*</span></label>
                     <input type="text" name="email" required data-validation="emailAddr" value="alb@mail.com"
                         placeholder="Email *">
                     <span class="status"></span>
@@ -58,13 +58,15 @@
                     <span class="status"></span>
                 </div>
                 <div class="field">
-                    <label data-trValue="{{tr PASSWORD_LABEL}}"><span class="required">*</span></label>
+                    <label data-trValue="{{tr PASSWORD_LABEL}}">
+                        <span class="required">*</span></label>
                     <input type="password" id="password" name="password" required data-validation="password"
                         value="Abc12#" placeholder="Senha *">
                     <span class="status"></span>
                 </div>
                 <div class="field">
-                    <label data-trValue="{{tr REPEAT_PASSWORD_LABEL}}"><span class="required">*</span></label>
+                    <label data-trValue="{{tr REPEAT_PASSWORD_LABEL}}">
+                        <span class="required">*</span></label>
                     <input type="password" name="password" required data-validation="confirmPassword" value="Abc12#"
                         placeholder="Senha de novo *">
                     <span class="status"></span>

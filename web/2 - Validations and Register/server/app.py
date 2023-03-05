@@ -103,6 +103,24 @@ async def register(
 ################################################################################
 
 
+@app.post('/tournaments', response_model=sch.TournamentRegisterResult)
+async def tournaments(
+        tournament: sch.TournamentRegister,
+        db_session: Session = Depends(get_db_session),
+):
+    db_tournament = crud.get_tournament_by_name(db_session, tournament.name)
+    if not db_tournament:
+        db_tournament = crud.create_tournament(db_session, tournament)
+    else:
+        error = ErrorCode.ERR_TOURNAMENT_ALREADY_EXISTS
+        raise HTTPException(
+            status_code=404, detail=error.details(id=db_tournament.name))
+
+    return db_tournament
+
+################################################################################
+
+
 def main():
     import uvicorn
     from docopt import docopt
