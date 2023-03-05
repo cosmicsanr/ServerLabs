@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Registo Torneio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="registo.css">
+    <script type="module" src="registTournament.js" defer></script>
+    <script type="module" src="locale.js" defer></script>
+    <!-- <meta http-equiv="Content-Security-Policy" content="connect-src 'self' http://127.0.0.1:8000"> -->
+</head>
+
+<body>
+
+    <main>
+
+        <div class="left-part">
+            <i class="fa fa-table-tennis fa-4x"></i>
+            <h1 data-trValue="{{tr TOURNAMENT}}"></h1>
+            <p data-trValue="{{tr TOURNAMENT_PRIZES}}"></p>
+            <div class="btn-group">
+                <a class="btn-item" href="#" data-trValue="{{tr RULES}}"></a>
+                <a class="btn-item" href="#" data-trValue="{{tr MEMBERS}}"></a>
+            </div>
+        </div>
+        <form autocomplete="off" novalidate>
+            <div class="title">
+                <i class="fas fa-pencil-alt"></i>
+                <h2 data-trValue="{{tr INSERT_TOURNAMENT_TITLE}}"></h2>
+            </div>
+            <div class="submission-status"></div>
+            <div class="info">
+                <div class="field">
+                    <label data-trValue="{{tr TOURNAMENT_NAME_LABEL}}">
+                        <span class="required">*</span></label>
+                    <input type="text" name="tournamentName" required autofocus data-validation="tournamentName"
+                        value="Spring" placeholder="Nome do torneio *">
+                    <span class="status"></span>
+                </div>
+                <div class="field">
+                    <label data-trValue="{{tr START_DATE_LABEL}}">
+                        <span class="required">*</span></label>
+                    <input type="text" name="startDate" required data-validation="date_DD/MM/YYYY" value="20/03/2023"
+                        placeholder="Data de início (DD/MM/AAAA) *">
+                    <span class="status"></span>
+                </div>
+                <div class="field">
+                    <label data-trValue="{{tr END_DATE_LABEL}}">
+                        <span class="required">*</span></label>
+                    <input type="text" name="endDate" required data-validation="date_DD/MM/YYYY" value="25/03/2023"
+                        placeholder="Data de fim (DD/MM/AAAA) *">
+                    <span class="status"></span>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" name="privacyPolice" required checked="true" data-validation>
+                    <span data-trValue="{{tr PRIVACY_POLICY_MSG}}">
+                    </span>
+                    <span>
+                        <a href="https://www.ttennis.com/privacy-policy" data-trValue="{{tr PRIVACY_POLICY}}"></a>.
+                    </span>
+                    <span class="status"></span>
+                </div>
+                <button type="button" id="submit" href="/" data-trValue="{{tr SUBMIT_BTN}}"></button>
+                <button type="button" id="reset" href="/" data-trValue="{{tr RESET_BTN}}"></button>
+        </form>
+        <div id="btnTranslation">
+            <select name="translation" id="translation">
+                <option value="en_US" id="en-US-btn">en-US</option>
+                <option value="pt_PT" id="pt-PT-btn">pt_PT</option>
+            </select>
+        </div>
+    </main>
+</body>
+
+</html>
