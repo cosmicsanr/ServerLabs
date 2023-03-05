@@ -35,7 +35,6 @@ window.addEventListener('load', function () {
     installValidators();
     whenClick('reset', e => resetAllFields());
     whenClick('submit', validateAndSubmitForm);
-    //tourn();
 });
 
 
@@ -60,7 +59,6 @@ tournReq.onload = function () {
     }
 };
 tournReq.send();
-
 
 
 async function validateAndSubmitForm() {
