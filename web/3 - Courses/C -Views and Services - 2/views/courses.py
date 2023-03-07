@@ -1,52 +1,24 @@
 from fastapi import APIRouter
 from fastapi_chameleon import template
 
+from common import base_viewmodel_with
+from services import course_service
+
 router = APIRouter()
+
+AVAILABLE_COURSES_COUNT = 4
 
 
 @router.get('/courses')
 @template()
 async def courses():
-    return {
-        'available_courses': [
-            {
-                'id': 5,
-                'category': 'Programação Web',
-                'price': 190,
-                'name': 'Desenvolvimento de Websites',
-                'summary': 'Consectetur et, temporibus velit inventore porro sint dolore hic veniam sapiente, quos voluptatem aliquid, explicabo doloremque sunt!',
-                'trainer_id': 1,
-                'trainer_name': 'Osmar',
-            },
-            {
-                'id': 6,
-                'category': 'Marketing',
-                'price': 250,
-                'name': 'SEO - Optimizações Motores de Busca',
-                'summary': 'Et architecto provident deleniti facere repellat nobis iste. Id facere quia quae dolores dolorem tempore.',
-                'trainer_id': 4,
-                'trainer_name': 'Bernardo',
-            },
-            {
-                'id': 7,
-                'category': 'Programação',
-                'price': 250,
-                'name': 'Programação de Device Drivers',
-                'summary': 'Ex voluptatibus amet magnam maxime. Repellat quis eos laudantium magnam alias quisquam repellendus magni, quas nam vitae explicabo sed necessitatibus? Eaque!',
-                'trainer_id': 2,
-                'trainer_name': 'Alberta',
-            },
-            {
-                'id': 8,
-                'category': 'Electrónica',
-                'price': 280,
-                'name': 'Microsoldadura de SMD',
-                'summary': ' Esse est nemo dolorum tempora numquam dolorem in optio sed quasi voluptate! Voluptatibus animi accusantium ad! Ratione et possimus repellendus vero nemo id modi.',
-                'trainer_id': 6,
-                'trainer_name': 'Roberta',
-            },
-        ],
-    }
+    return courses_viewmodel()
+
+
+def courses_viewmodel():
+    return base_viewmodel_with({
+        'available_courses': course_service.available_courses(AVAILABLE_COURSES_COUNT)
+    })
 
 
 @router.get('/courses/{course_id}')
