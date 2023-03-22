@@ -1,0 +1,5 @@
+fastapi
+uvicorn[standard]
+chameleon
+fastapi-chameleon # contem um decorador que facilita
+aiofiles
